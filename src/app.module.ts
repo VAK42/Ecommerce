@@ -20,6 +20,7 @@ import { productEntity } from './entities/product.entity'
 import { paymentEntity } from './entities/payment.entity'
 import { couponEntity } from './entities/coupon.entity'
 import { reviewEntity } from './entities/review.entity'
+import { ChatGateway } from './gateways/chatGateway'
 import { usersService } from './services/users.service'
 import { orderResolver } from './graphql/orderResolver'
 import { orderEntity } from './entities/order.entity'
@@ -30,11 +31,13 @@ import { adminGuard } from './guards/admin.guard'
 import { GraphQLModule } from '@nestjs/graphql'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ApolloDriver } from '@nestjs/apollo'
+import { ConfigModule } from '@nestjs/config'
 import { jwtGuard } from './guards/jwt.guard'
 import { Module } from '@nestjs/common'
 import 'reflect-metadata'
 @Module({
 	imports: [
+		ConfigModule.forRoot({ isGlobal: true }),
 		TypeOrmModule.forRoot({
 			type: 'sqlite',
 			database: './data/sqlite.db',
@@ -87,6 +90,7 @@ import 'reflect-metadata'
 		productResolver,
 		userResolver,
 		orderResolver,
+		ChatGateway,
 	],
 })
 export class appModule {}
