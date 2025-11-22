@@ -13,9 +13,12 @@ export class analyticsController {
   ) { }
   @Get('sales')
   async sales(@Query('from') from?: string, @Query('to') to?: string) {
-    const orders = await this.orderRepo.find()
-    const revenue = orders.reduce((s, o) => s + Number(o.total), 0)
-    return { period: [from || 'all', to || 'now'], orders: orders.length, revenue }
+    const { revenue } = await this.orderRepo
+      .createQueryBuilder('o')
+      .select('SUM(o.total)', 'revenue')
+      .getRawOne()
+    const count = await this.orderRepo.count()
+    return { period: [from || 'all', to || 'now'], orders: count, revenue: Number(revenue) || 0 }
   }
   @Get('products')
   async productStats() {

@@ -28,8 +28,10 @@ export class inventoryController {
   @Get('summary')
   async summary() {
     const totalProducts = await this.repo.count()
-    const items = await this.repo.find()
-    const totalStock = items.reduce((s, p) => s + Number(p.stock), 0)
-    return { totalProducts, totalStock }
+    const { totalStock } = await this.repo
+      .createQueryBuilder('p')
+      .select('SUM(p.stock)', 'totalStock')
+      .getRawOne()
+    return { totalProducts, totalStock: Number(totalStock) || 0 }
   }
 }

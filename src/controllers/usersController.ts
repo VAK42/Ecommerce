@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, Query, UseGuards, Req } from '@nestjs/common'
+import { Controller, Get, Post, Put, Delete, Param, Body, Query, UseGuards, Req, ConflictException } from '@nestjs/common'
 import { userEntity } from '../entities/user.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { jwtGuard } from '../guards/jwt.guard'
@@ -9,9 +9,16 @@ export class usersController {
   constructor(@InjectRepository(userEntity) private readonly repo: Repository<userEntity>) { }
   @Post('register')
   async register(@Body() payload) {
-    const hash = await bcrypt.hash(String(payload.password || 'password'), 10)
-    const u = this.repo.create(Object.assign({}, payload, { password: hash }))
-    return this.repo.save(u)
+    try {
+      const hash = await bcrypt.hash(String(payload.password || 'password'), 10)
+      const u = this.repo.create(Object.assign({}, payload, { password: hash }))
+      return await this.repo.save(u)
+    } catch (e: any) {
+      if (e.code === 'SQLITE_CONSTRAINT' || e.message.includes('UNIQUE')) {
+        throw new ConflictException('Email already in use')
+      }
+      throw e
+    }
   }
   @UseGuards(jwtGuard)
   @Get('me')

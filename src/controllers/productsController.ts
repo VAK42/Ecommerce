@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, Query, UseGuards } from '@nestjs/common'
+import { CreateProductDto } from '../dto/createProduct.dto'
 import { productEntity } from '../entities/product.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository, Like } from 'typeorm'
@@ -31,7 +32,7 @@ export class productsController {
   }
   @UseGuards(jwtGuard)
   @Post()
-  create(@Body() payload: any) {
+  create(@Body() payload: CreateProductDto) {
     const item = this.repo.create(payload)
     return this.repo.save(item)
   }
