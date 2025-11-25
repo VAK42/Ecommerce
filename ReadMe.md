@@ -1,18 +1,18 @@
 # E-Commerce Platform - Comprehensive Technical Documentation
 ### Home
-<img src="/FE/img/Home.png">
+<img src="/Frontend/img/Home.png">
 
 ### Shop
-<img src="/FE/img/Shop.png">
+<img src="/Frontend/img/Shop.png">
 
 ### Cart
-<img src="/FE/img/Cart.png">
+<img src="/Frontend/img/Cart.png">
 
 ### Login
-<img src="/FE/img/Login.png">
+<img src="/Frontend/img/Login.png">
 
 ### Register
-<img src="/FE/img/Register.png">
+<img src="/Frontend/img/Register.png">
 
 ---
 ## 1. Project Overview & Architectural Vision
